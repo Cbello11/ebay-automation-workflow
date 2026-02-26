@@ -1,0 +1,9 @@
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Data & Config
+/data/*.db
+config.py
