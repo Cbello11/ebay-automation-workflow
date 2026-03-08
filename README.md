@@ -1,36 +1,29 @@
-# eBay Automation Workflow
+# Universal Reader (Mobile-First)
 
-This project automates eBay product listing and inventory management. The full codebase and documentation will be developed here.
+A personal, offline-friendly "Universal Reader" web app that runs locally and supports private single-user workflows.
 
-## Project Structure
-- └── : Holds input CSVs and the local SQLite database.
-- └── : Contains all the Python source code.
-  - └── : Handles communication with external APIs (eBay, Google).
-  - └── : The main application logic and orchestration.
-  - └── : Helper functions and utilities.
-- └── : Standalone scripts for tasks like database migration.
-- └── : HTML templates for the web dashboard.
-- └── : Unit and integration tests.
-- └── : Configuration settings (API keys, file paths).
-- └── : The main entry point to run the application.
+## Features
+- Home screen with **Add file** (drag/drop + picker), paste text/URL, recent files list (thumbnail/icon/date).
+- Supports common uploads: **PDF, DOCX, XLSX, PPTX, TXT/MD/code, PNG/JPG/SVG, MP3/WAV, SRT/VTT**.
+- Every upload is stored in local **Blink Storage** (`data/blink_storage`) and linked to `private_local_user`.
+- Metadata is persisted in SQLite `files`; edits are versioned in `file_versions`.
+- Type-aware viewer:
+  - Documents: page/preview pane + side AI drawer.
+  - Text/code: editable editor with live word count.
+  - Images: zoomable preview + describe/translate actions.
+  - Audio: playback + streaming transcription area.
+  - Unsupported: raw fallback + download.
+- AI toolbelt drawer: Translate, Summarize, Edit (version save), Ask Anything.
+- Global search over title, snippet, and summary.
+- Offline-friendly local cache of last 10 files and AI outputs.
+- Minimal mobile UI (rounded cards, soft shadows, dark/light toggle, haptic vibration).
 
-## How to Upload Files to this Repository
+## Run
+```bash
+python main.py
+```
+Then open `http://localhost:8000`.
 
-1.  **Install the GitHub CLI:** If you don\'t have it, install it from [cli.github.com](https://cli.github.com/).
-2.  **Clone the repository:** Open a terminal and run the following command:
-    ```bash
-    gh repo clone Cbello11/ebay-automation-workflow
-    ```
-3.  **Add your files:** Copy the files you want to upload into the correct directory within the cloned folder. For example, your product data CSV should go into the  directory.
-4.  **Commit and push the changes:** In your terminal, navigate into the repository folder () and run these commands:
-    ```bash
-    # Add all new and modified files to the staging area
-    git add .
-
-    # Commit the changes with a descriptive message
-    git commit -m "Add my product data file"
-
-    # Push the changes to the GitHub repository
-    git push
-    ```
-
+## Data model
+- `files`: name, size, mime, language guess, summary/snippet, storage path, timestamps.
+- `file_versions`: file_id + edited content + timestamp.
