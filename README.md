@@ -1,36 +1,52 @@
-# eBay Automation Workflow
+# Personal Data Sovereignty Platform
 
-This project automates eBay product listing and inventory management. The full codebase and documentation will be developed here.
+A cross-platform-ready **Personal Data Sovereignty** application with:
+- Responsive web app (mobile-friendly) served from one codebase.
+- API-first backend suitable for native mobile clients using the same endpoints.
+- SQLite persistence where all user-owned records include a `user_id` column.
 
-## Project Structure
-- └── : Holds input CSVs and the local SQLite database.
-- └── : Contains all the Python source code.
-  - └── : Handles communication with external APIs (eBay, Google).
-  - └── : The main application logic and orchestration.
-  - └── : Helper functions and utilities.
-- └── : Standalone scripts for tasks like database migration.
-- └── : HTML templates for the web dashboard.
-- └── : Unit and integration tests.
-- └── : Configuration settings (API keys, file paths).
-- └── : The main entry point to run the application.
+## Core capabilities delivered
 
-## How to Upload Files to this Repository
+- **Landing page (no auth)** with trust + earnings messaging and sign-up/log-in CTA.
+- **Authenticated dashboard** sections for Data Vault, Permissions, Monetization Marketplace, Privacy Layer, AI Insights, Notifications, Realtime presence, Billing, Settings, and Admin portal.
+- **Data Vault** source connection + encrypted payload storage simulation + item search/filter.
+- **Permissions** granular records and instant revoke endpoint.
+- **Marketplace** listing creation, bidding/offers, Stripe webhook success simulation, wallet updates, and earnings history.
+- **Privacy layer** differential privacy preview and sensitive-field redaction.
+- **AI Insights** streaming endpoint (SSE) for realtime cards.
+- **Notifications** records for new bids, sales, and permission changes.
+- **Plans & Billing** free/pro logic and coupon (`TESTCOUPON`) test flow.
+- **Settings** payment methods, GDPR/CCPA request center, account deletion.
+- **Admin portal** dispute/compliance case management.
 
-1.  **Install the GitHub CLI:** If you don\'t have it, install it from [cli.github.com](https://cli.github.com/).
-2.  **Clone the repository:** Open a terminal and run the following command:
-    ```bash
-    gh repo clone Cbello11/ebay-automation-workflow
-    ```
-3.  **Add your files:** Copy the files you want to upload into the correct directory within the cloned folder. For example, your product data CSV should go into the  directory.
-4.  **Commit and push the changes:** In your terminal, navigate into the repository folder () and run these commands:
-    ```bash
-    # Add all new and modified files to the staging area
-    git add .
+## Run locally
 
-    # Commit the changes with a descriptive message
-    git commit -m "Add my product data file"
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install fastapi uvicorn pydantic[email]
+uvicorn main:app --reload
+```
 
-    # Push the changes to the GitHub repository
-    git push
-    ```
+Then open `http://127.0.0.1:8000`.
+
+## API overview
+
+- Auth: `/api/auth/signup`, `/api/auth/login`
+- Data vault: `/api/vault/sources`, `/api/vault/items`
+- Permissions: `/api/permissions`, `/api/permissions/{id}/revoke`
+- Marketplace: `/api/marketplace/listings`, `/api/marketplace/offers`, `/api/stripe/webhook/success`
+- Privacy: `/api/privacy/preview`, `/api/privacy/redact`
+- Insights stream: `/api/insights/stream`
+- Notifications: `/api/notifications`
+- Realtime presence: `/api/realtime/presence`
+- Billing: `/api/billing/subscription`
+- Settings: `/api/settings/payment-methods`, `/api/settings/gdpr-request`, `/api/settings/account`
+- Admin: `/api/admin/cases`
+
+## Tech notes
+
+- Persistence: SQLite (`data/pds_platform.db`).
+- UI: static HTML/CSS/JS in `templates/pds/`.
+- Backend: FastAPI + Pydantic models in `main.py`.
 
