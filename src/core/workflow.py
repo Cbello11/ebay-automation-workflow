@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 from src.utils.helpers import SUPPORTED_EXTENSIONS, read_file, summarize_content
+
+logger = logging.getLogger(__name__)
 
 
 class FileReaderWorkflow:
@@ -37,7 +40,11 @@ class FileReaderWorkflow:
             ]
 
         for file_path in files:
-            parsed = read_file(file_path)
-            summaries.append(summarize_content(file_path, parsed))
+            try:
+                parsed = read_file(file_path)
+                summaries.append(summarize_content(file_path, parsed))
+            except Exception as exc:
+                logger.warning("Skipping %s: %s", file_path, exc)
+                summaries.append(f"[Skipped] {file_path.name}: {exc}")
 
         return summaries
