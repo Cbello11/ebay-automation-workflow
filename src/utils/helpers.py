@@ -22,7 +22,10 @@ def read_file(path: Path) -> Any:
 
     if suffix == ".csv":
         with path.open(newline="", encoding="utf-8") as csv_file:
-            return list(csv.DictReader(csv_file))
+            reader = csv.DictReader(csv_file)
+            rows = list(reader)
+            fieldnames = list(reader.fieldnames or [])
+            return {"fieldnames": fieldnames, "rows": rows}
 
     raise ValueError(
         f"Unsupported file type '{suffix}'. Supported types: {sorted(SUPPORTED_EXTENSIONS)}"
@@ -47,8 +50,12 @@ def summarize_content(path: Path, content: Any) -> str:
         return f"{path.name}: JSON value of type {type(content).__name__}."
 
     if suffix == ".csv":
-        rows = content if isinstance(content, list) else []
-        columns = list(rows[0].keys()) if rows else []
+        if isinstance(content, dict):
+            rows = content.get("rows", [])
+            columns = content.get("fieldnames") or (list(rows[0].keys()) if rows else [])
+        else:
+            rows = content if isinstance(content, list) else []
+            columns = list(rows[0].keys()) if rows else []
         return f"{path.name}: CSV with {len(rows)} rows and columns {columns}."
 
     return f"{path.name}: parsed as {type(content).__name__}."
